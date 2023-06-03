@@ -22,3 +22,36 @@ Graph* graph_initializer(int vertices_num, int edges_num){
 
 	return g;
 }
+
+void graph_add_vertice(Graph* graph, const char* vertice){
+	if (graph->vertices_num >= SISE_STR) {
+        printf("Error: the limit has been reached.\n");
+        return;
+    }
+	//usar strcpy para adiconar no lugar certo
+	graph->vertices_num++;
+
+}
+void graph_add_edge(Graph* graph, const char* source, const char* destination){
+	int source_index = -1;
+    int destination_index = -1;
+
+	//find vertice
+
+	//a validation
+	if (source_index == -1 || destination_index == -1) {
+        printf("Error: vertice not found.\n");
+        return;
+    }
+
+	//conecte the edge
+
+}
+
+
+void graph_destroy(Graph* graph) {
+	//ver se pode usar a função free 
+    free(graph->vertices);
+    free(graph->edges);
+    free(graph);
+}

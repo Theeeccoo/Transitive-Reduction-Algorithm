@@ -41,4 +41,7 @@
  */
 /**@{*/
 extern Graph* graph_initializer(int, int);
+extern void graph_add_vertice(Graph* graph, const char* vertice);
+extern void graph_add_edge(Graph* graph, const char* source, const char* destination);
+extern void graph_destroy(Graph* graph);
 /**@}*/
