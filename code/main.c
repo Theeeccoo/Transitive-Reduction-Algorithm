@@ -33,24 +33,23 @@ char** splitInstruction(char *edge){
 
 int main(void){
 	int	vertices = 0,
-	       	edges = 0, 
+	    edges = 0, 
 		flag = 0, 
 		control = 0;
 	Graph *g;
 
 	char	vertice[STR_SIZE],
-		edge[STR_SIZE];
+			edge[STR_SIZE];
 
 	STRING* split_edge;
 	
-	FILE *entrada = fopen("grafo.txt", "rt");
+	FILE *entrada = fopen("grafo2.txt", "rt");
 	if (entrada == NULL) {
 		printf("ERROR: Invalid opening of file\n");
 	} else {
 		fscanf(entrada, "%d", &vertices);
 		fscanf(entrada, "%d", &edges);
 		fscanf(entrada, "%d", &flag);
-		
 
 		// Basic verifications to make sure that the Graph can be created.
 		if (vertices <= 0) {
@@ -65,7 +64,7 @@ int main(void){
 		} else {
 			// Allocates memory space for graph
 			g = graph_initializer(vertices, edges, flag);
-
+		
 			// g == NULL only if vertices OR edges > MAX_AMOUNT
 			if ( g != NULL ) {
 				// Vertex reading
@@ -85,7 +84,7 @@ int main(void){
 					graph_add_edge(g, split_edge[0], split_edge[1]);
 					control++;
 				}
-
+	
 				graph_print_vertices(g);
 				graph_print_edges(g);
 			} // Ending Graph null verification
@@ -93,16 +92,10 @@ int main(void){
 	} // Ending file properly opened verification
 
 
-	// Testing stack
-	Stack *s = initStack(vertices);
-	for (int i = 0; i < g->vertices_allocated; i++) {
-		push(s, g->vertices[i]);
-	}
-	stack_print_vertices(s);
+	// Testing direct transitive closure
+	direct_transitive_closure(g);
+	graph_print_direct_transitive_closure(g);
 
-	printf("POP: %s\n", pop(s));
-
-	stack_print_vertices(s);
 	
 	fclose(entrada);
 	return 0;	

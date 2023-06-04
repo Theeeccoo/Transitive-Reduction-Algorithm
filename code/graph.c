@@ -1,4 +1,5 @@
 #include "graph.h"
+#include "stack.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,10 +27,14 @@ Graph* graph_initializer(int number_of_vertices, int number_of_edges, int flag){
 	g->vertices = (STRING*) malloc( sizeof(STRING) * number_of_vertices + 1 );
 	g->vertices_allocated = number_of_vertices;
 
-	g->edges = (STRING**) malloc( sizeof(STRING*) * number_of_edges + 1 );
+	g->edges = (STRING**) malloc( sizeof(STRING*) * number_of_vertices + 1 );
 	g->edges_allocated = number_of_edges;
 
 	g->edges_neighbours = (int*) calloc( number_of_vertices, sizeof(int) );
+
+	g->transitive_closure = (STRING**) malloc( sizeof(STRING*) * number_of_vertices + 1 );
+
+	g->num_transitive_closure = (int*) calloc( number_of_vertices, sizeof(int) );
 
 	g->flag = flag;
 
@@ -71,6 +76,7 @@ int graph_add_vertice(Graph* graph, STRING vertice){
 	graph->vertices_amount++;
 
 	graph->edges[position] = (STRING*) malloc( sizeof(STRING) * graph->vertices_allocated );
+	graph->transitive_closure[position] = (STRING*) malloc( sizeof(STRING) * graph->vertices_allocated );
 	
 	return position;
 }
@@ -194,7 +200,7 @@ int graph_vertice_finder(Graph* graph, const char* vertice) {
 
 int graph_edge_finder(Graph* graph, int vertice_position, const char* to_be_found){
 	int	position    = -1,
-		i 	    =  0,
+		i 	   	 	=  0,
 		neighbours_amount = graph->edges_neighbours[vertice_position];
 
 
@@ -208,6 +214,62 @@ int graph_edge_finder(Graph* graph, int vertice_position, const char* to_be_foun
 	return position;
 }
 
+/**
+ * @brief Constructs direct transitive closure of all graph vertices
+ *
+ * @param graph Graph to be iterated
+ *
+ * @details Using depth-first search with a stack for traversal, the direct transitive 
+ *          closure of all vertices of the graph is formed.
+ */
+void direct_transitive_closure(Graph* graph) {
+	Stack *s = initStack(graph->vertices_allocated);
+
+	// Helper structure to know if the vertex was already inserted in the stack during traversal
+	// 0 for not entered, 1 if already entered
+	int *vertex_visited = (int*) calloc( graph->vertices_allocated, sizeof(int) );
+	int pos = 0;
+	int pos_neighboring_vertex = -1;
+	int pos_current_vertex = -1;
+	STRING vertice = (STRING) malloc( sizeof(char) * STR_SIZE + 1 );
+
+	for(int i = 0; i < graph->vertices_allocated; i++) {
+		push(s, graph->vertices[i]);
+		vertex_visited[i] = 1; 
+	
+		while ( ! isEmpty(s)) {
+			// Remove top vertex from stack
+			strcpy(vertice, "");
+			strcpy(vertice, pop(s));
+			pos_current_vertex = graph_vertice_finder(graph, vertice);
+			
+			if (pos_current_vertex != -1) {
+				// Loop through all neighbors of vertex popped from stack
+				for (int k = 0; k < graph->edges_neighbours[pos_current_vertex]; k++) {
+					pos_neighboring_vertex = graph_vertice_finder(graph, graph->edges[pos_current_vertex][k]);
+					
+					// If neighboring vertex has already been pushed onto the stack
+					if (pos_neighboring_vertex != -1 && vertex_visited[pos_neighboring_vertex] == 0) {
+						// Add unvisited neighbor vertex in stack and direct transitive closure
+						push(s, graph->edges[pos_current_vertex][k]);
+						graph->transitive_closure[i][pos] = (STRING) malloc( sizeof(char) * STR_SIZE + 1 );
+						strcpy(graph->transitive_closure[i][pos], "");
+						strcpy( graph->transitive_closure[i][pos], s->stack[s->top] );
+						vertex_visited[pos_neighboring_vertex] = 1; 
+						graph->num_transitive_closure[i] += 1;
+						pos++;
+					}
+				}
+			}
+		}
+
+		// Update visited vertices to the transitive closure of the next vertex
+		for (int j = 0; j < graph->vertices_allocated; j++) {
+			vertex_visited[j] = 0;
+		}
+		pos = 0;
+	}
+}	
 
 void graph_print_vertices(Graph* graph){
 	int	i = 0;
@@ -237,10 +299,27 @@ void graph_print_edges(Graph* graph){
 		}
 		printf("\n");
 	}
-
 }
 
+void graph_print_direct_transitive_closure(Graph* graph) {
+	int	i = 0,
+		j = 0; 
 
+	printf("\nDirect transitive closure of your graph: \n");	
+
+	for( ; i < graph->vertices_amount ; i++ ){
+		
+		printf("%s's direct transitive closure: \n\t", graph->vertices[i]);
+		int	num_vertices_transitive_closure = graph->num_transitive_closure[i];
+		if ( num_vertices_transitive_closure == 0 ) { printf("EMPTY\n"); }
+		else {
+			for( j = 0; j < num_vertices_transitive_closure; j++ ){
+				printf("%s-\t", graph->transitive_closure[i][j]);
+			}
+		}
+		printf("\n");
+	}
+}
 
 void graph_destroy(Graph* graph) {
 	//ver se pode usar a função free 

@@ -11,20 +11,6 @@
 #ifndef GRAPH_H_
 #define GRAPH_H_
 
-
-	// TODO Create a new Struct for VERTICE and EDGE
-	//     Our graph will have an array of VERTICE and EDGE
-	//     Will be easier to manipulate
-	//
-	//     VERTICE must have:
-	//     		Its value
-	//     		Its Fecho transitivo
-	//     		Its position on VERTICE array
-	//
-	//     	
-	//     		
-
-
 	/**
 	 * @name Graph definitions
 	 */
@@ -49,9 +35,11 @@
 		 * @name Graph vertices information
 		 */
 		/**@{*/
-		STRING*	vertices;		/* Vertices values */
-		int	vertices_amount;	/* Number of vertices in Graph at the moment */
-		int	vertices_allocated;	/* Number of allocated vertices at the initialization time */		
+		STRING*	vertices;				/* Vertices values */
+		int	vertices_amount;			/* Number of vertices in Graph at the moment */
+		int	vertices_allocated;			/* Number of allocated vertices at the initialization time */		
+		STRING** transitive_closure;	/* Direct transitive closure of all vertices of the graph */
+		int*	num_transitive_closure;	/* Number of vertices in transitive closure */
 		/**@}*/
 			
 
@@ -83,6 +71,8 @@ extern int  graph_add_edge(Graph* graph, const char* source, const char* destina
 extern void graph_destroy(Graph* graph);
 extern int  graph_vertice_finder(Graph* graph, const char* vertice);
 extern int  graph_edge_finder(Graph* graph, int vertice_position, const char* to_be_found);
+extern void direct_transitive_closure(Graph* graph);
+extern void graph_print_direct_transitive_closure(Graph* graph);
 
 extern void graph_print_vertices(Graph* graph);
 extern void graph_print_edges(Graph* graph);
