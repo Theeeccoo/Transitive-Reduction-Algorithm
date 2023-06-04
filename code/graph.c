@@ -107,7 +107,7 @@ int graph_add_edge(Graph* graph, const char* first_vertice, const char* second_v
 	}
 
 	// Non-direct graph 
-	if ( graph->flag == NON_DIRECTED) {
+	if ( graph->flag == NON_DIRECTED ) {
 		int	first_neighbours_amount = graph->edges_neighbours[pos_first], 
 			second_neighbours_amount = graph->edges_neighbours[pos_second];
 

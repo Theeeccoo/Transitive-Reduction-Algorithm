@@ -12,7 +12,7 @@
 #define GRAPH_H_
 
 
-	//TODO Create a new Struct for VERTICE and EDGE
+	// TODO Create a new Struct for VERTICE and EDGE
 	//     Our graph will have an array of VERTICE and EDGE
 	//     Will be easier to manipulate
 	//
@@ -31,8 +31,8 @@
 	/**@{*/
 	#define STRING			char*
 	#define STR_SIZE		30		/* Max size of a string */
-	#define MAX_AMOUNT		1000	/* Max number amount of vertices AND edges */
-	#define NON_DIRECTED 	0		/* Graph not directed */
+	#define MAX_AMOUNT		1000		/* Max number amount of vertices AND edges */
+	#define NON_DIRECTED 		0		/* Graph not directed */
 	#define DIRECTED		1		/* Graph directed */
 	/**@}*/
 
@@ -40,8 +40,10 @@
 
 		/**
 		 * @name General graph information
-		*/
-		int flag;				/* Information about direction of edges */
+		 */
+		/**@{*/
+		int flag;				/* Information about Graph's direction of edges */
+		/**@}*/
 
 		/**
 		 * @name Graph vertices information
