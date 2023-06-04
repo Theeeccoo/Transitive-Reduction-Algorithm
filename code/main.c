@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "graph.h"
+#include "stack.h"
 
 /**
  * @brief Splits a edge string into pieces containing vertices
@@ -35,6 +36,7 @@ int main(void){
 	       	edges = 0, 
 		flag = 0, 
 		control = 0;
+	Graph *g;
 
 	char	vertice[STR_SIZE],
 		edge[STR_SIZE];
@@ -62,7 +64,7 @@ int main(void){
 
 		} else {
 			// Allocates memory space for graph
-			Graph *g = graph_initializer(vertices, edges, flag);
+			g = graph_initializer(vertices, edges, flag);
 
 			// g == NULL only if vertices OR edges > MAX_AMOUNT
 			if ( g != NULL ) {
@@ -89,6 +91,18 @@ int main(void){
 			} // Ending Graph null verification
 		} // Ending Graph's variables verification
 	} // Ending file properly opened verification
+
+
+	// Testing stack
+	Stack *s = initStack(vertices);
+	for (int i = 0; i < g->vertices_allocated; i++) {
+		push(s, g->vertices[i]);
+	}
+	stack_print_vertices(s);
+
+	printf("POP: %s\n", pop(s));
+
+	stack_print_vertices(s);
 	
 	fclose(entrada);
 	return 0;	
