@@ -29,14 +29,21 @@
 	 * @name Graph definitions
 	 */
 	/**@{*/
-	#define STRING		char*
-	#define STR_SIZE	30		/* Max size of a string */
-	#define MAX_AMOUNT	1000		/* Max number amount of vertices AND edges */
+	#define STRING			char*
+	#define STR_SIZE		30		/* Max size of a string */
+	#define MAX_AMOUNT		1000	/* Max number amount of vertices AND edges */
+	#define NON_DIRECTED 	0		/* Graph not directed */
+	#define DIRECTED		1		/* Graph directed */
 	/**@}*/
 
 	typedef struct Graph {
 
-		/*
+		/**
+		 * @name General graph information
+		*/
+		int flag;				/* Information about direction of edges */
+
+		/**
 		 * @name Graph vertices information
 		 */
 		/**@{*/
@@ -68,9 +75,9 @@
  * @name Graph operations
  */
 /**@{*/
-extern Graph* graph_initializer(int number_of_vertices, int number_of_edges);
+extern Graph* graph_initializer(int number_of_vertices, int number_of_edges, int flag);
 extern int  graph_add_vertice(Graph* graph, STRING vertice);
-extern int  graph_add_edge(Graph* graph, const char* source, const char* destination, int flag);
+extern int  graph_add_edge(Graph* graph, const char* source, const char* destination);
 extern void graph_destroy(Graph* graph);
 extern int  graph_vertice_finder(Graph* graph, const char* vertice);
 extern int  graph_edge_finder(Graph* graph, int vertice_position, const char* to_be_found);

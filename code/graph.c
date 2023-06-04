@@ -8,13 +8,14 @@
  * 
  * @param number_of_vertices Number of desired vertices
  * @param number_of_edges Number of desired vertices
+ * @param flag Flag to control insertion of edges
  *
  * @details Allocates memory space based on sizes given as parameters
  *
  * @returns Reference to newly create Graph
  */
 
-Graph* graph_initializer(int number_of_vertices, int number_of_edges){
+Graph* graph_initializer(int number_of_vertices, int number_of_edges, int flag){
 	if ( number_of_vertices >= MAX_AMOUNT || number_of_edges >= MAX_AMOUNT ) {
 		printf("ERROR: You have reached the maximum number of vertices and edges in your Graph (%d)\n", MAX_AMOUNT);
 		return NULL;
@@ -30,10 +31,12 @@ Graph* graph_initializer(int number_of_vertices, int number_of_edges){
 
 	g->edges_neighbours = (int*) calloc( number_of_vertices, sizeof(int) );
 
+	g->flag = flag;
+
 	return g;
 }
 
-/*
+/**
  * @brief Insert given vertice into graph
  *
  * @param graph Graph to have the new vertice
@@ -50,7 +53,7 @@ int graph_add_vertice(Graph* graph, STRING vertice){
 		aux	   =  0,
 		position   =  0;
 
-	if ( graph->vertices_amount >= graph->vertices_allocated ) {
+	if ( graph->vertices_amount > graph->vertices_allocated ) {
 		printf("ERROR: the limit (%d) has been reached.\n", graph->vertices_allocated);
 		return controller;
 	}
@@ -72,13 +75,12 @@ int graph_add_vertice(Graph* graph, STRING vertice){
 	return position;
 }
 
-/*
+/**
  * @brief Insert edges on given vertices
  *
  * @param graph Graph to have the new edge
  * @param first_vertice Vertice to have a new edge added
  * @param second_vertice Vertice to have a new edge added
- * @param flag Flag to control insertion
  *
  * @details Receives two vertices in order to create a new edge between them. 
  * FLAG variable defines if the insertion will be directed or non-directed.
@@ -93,7 +95,7 @@ int graph_add_vertice(Graph* graph, STRING vertice){
            
  */
 
-int graph_add_edge(Graph* graph, const char* first_vertice, const char* second_vertice, int flag){
+int graph_add_edge(Graph* graph, const char* first_vertice, const char* second_vertice){
 	int	controller = -1,
 		pos_first  =  0,
 		pos_second =  0;
@@ -105,7 +107,7 @@ int graph_add_edge(Graph* graph, const char* first_vertice, const char* second_v
 	}
 
 	// Non-direct graph 
-	if ( flag == 0 ) {
+	if ( graph->flag == NON_DIRECTED) {
 		int	first_neighbours_amount = graph->edges_neighbours[pos_first], 
 			second_neighbours_amount = graph->edges_neighbours[pos_second];
 
@@ -149,7 +151,7 @@ int graph_add_edge(Graph* graph, const char* first_vertice, const char* second_v
 }
 
 
-/*
+/**
  * @brief Returns, if existing, the position of given vertice
  *
  * @param graph Graph to be iterated
@@ -176,7 +178,7 @@ int graph_vertice_finder(Graph* graph, const char* vertice) {
 	return position;
 }
 
-/*
+/**
  * @brief Returns, if existing, the position of given vertice's neighbours in Edge list
  * 
  * @param graph Graph to be iterated
