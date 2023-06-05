@@ -22,7 +22,7 @@ Graph* graph_initializer(int number_of_vertices, int number_of_edges, int flag){
 		return NULL;
 	}
 
-	Graph *g = (Graph*) malloc( sizeof(Graph) );
+	Graph	*g = (Graph*) malloc( sizeof(Graph) );
 
 	g->vertices = (STRING*) malloc( sizeof(STRING) * number_of_vertices + 1 );
 	g->vertices_allocated = number_of_vertices;
@@ -40,6 +40,32 @@ Graph* graph_initializer(int number_of_vertices, int number_of_edges, int flag){
 
 	return g;
 }
+
+Graph* graph_clone(Graph *g){
+	if ( g == NULL ) {
+		printf("ERROR: The graph that you tried to clone is NULL");
+		return NULL;
+	}
+
+	Graph	*cloned = graph_initializer(g->vertices_amount, g->edges_amount, g->flag);
+	int	i = 0,
+		j = 0;
+
+	for ( ; i < g->vertices_amount; i++ ) {
+		graph_add_vertice(cloned, g->vertices[i]);
+	}
+
+	for ( i = 0; i < g->vertices_amount; i++ ) {
+	
+		for( j = 0; j < g->edges_neighbours[i]; j++ ) {
+						// a		b c d e f
+			graph_add_edge(cloned, g->vertices[i], g->edges[i][j]);	
+		}
+	}
+	
+	return cloned;
+}
+
 
 /**
  * @brief Insert given vertice into graph

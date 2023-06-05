@@ -35,11 +35,11 @@
 		 * @name Graph vertices information
 		 */
 		/**@{*/
-		STRING*	vertices;				/* Vertices values */
-		int	vertices_amount;			/* Number of vertices in Graph at the moment */
-		int	vertices_allocated;			/* Number of allocated vertices at the initialization time */		
-		STRING** transitive_closure;	/* Direct transitive closure of all vertices of the graph */
-		int*	num_transitive_closure;	/* Number of vertices in transitive closure */
+		STRING*	 vertices;				/* Vertices values */
+		int	 vertices_amount;			/* Number of vertices in Graph at the moment */
+		int	 vertices_allocated;			/* Number of allocated vertices at the initialization time */		
+		STRING** transitive_closure;			/* Direct transitive closure of all vertices of the graph */
+		int*	 num_transitive_closure;		/* Number of vertices in transitive closure */
 		/**@}*/
 			
 
@@ -66,6 +66,7 @@
  */
 /**@{*/
 extern Graph* graph_initializer(int number_of_vertices, int number_of_edges, int flag);
+extern Graph* graph_clone(Graph* graph);
 extern int  graph_add_vertice(Graph* graph, STRING vertice);
 extern int  graph_add_edge(Graph* graph, const char* source, const char* destination);
 extern void graph_destroy(Graph* graph);

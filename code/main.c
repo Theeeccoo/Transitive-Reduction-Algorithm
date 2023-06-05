@@ -33,13 +33,14 @@ char** splitInstruction(char *edge){
 
 int main(void){
 	int	vertices = 0,
-	    edges = 0, 
+		edges = 0, 
 		flag = 0, 
 		control = 0;
-	Graph *g;
+	Graph	*g, 
+		*cloned;
 
 	char	vertice[STR_SIZE],
-			edge[STR_SIZE];
+		edge[STR_SIZE];
 
 	STRING* split_edge;
 	
@@ -84,9 +85,15 @@ int main(void){
 					graph_add_edge(g, split_edge[0], split_edge[1]);
 					control++;
 				}
-	
+				cloned = graph_clone(g);
+				graph_add_vertice(cloned, "f");
 				graph_print_vertices(g);
 				graph_print_edges(g);
+
+
+				printf("\n\n\n\n\nCloned graph\n");
+				graph_print_vertices(cloned);
+				graph_print_edges(cloned);
 			} // Ending Graph null verification
 		} // Ending Graph's variables verification
 	} // Ending file properly opened verification
