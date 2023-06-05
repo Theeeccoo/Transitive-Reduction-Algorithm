@@ -34,7 +34,7 @@ int isEqual(Graph* original, Graph* modified){
  *
  * @details Receives a graph and iterates through to find transitive reduction
  * 
-* @returns Graph
+ * @returns Graph
  *
  */
 Graph* walk(Graph* graph) {
