@@ -17,8 +17,8 @@
 	/**@{*/
 	#define STRING			char*
 	#define STR_SIZE		30		/* Max size of a string */
-	#define MAX_AMOUNT		1000		/* Max number amount of vertices AND edges */
-	#define NON_DIRECTED 		0		/* Graph not directed */
+	#define MAX_AMOUNT		1000	/* Max number amount of vertices AND edges */
+	#define NON_DIRECTED 	0		/* Graph not directed */
 	#define DIRECTED		1		/* Graph directed */
 	/**@}*/
 
@@ -74,6 +74,7 @@ extern int  graph_vertice_finder(Graph* graph, const char* vertice);
 extern int  graph_edge_finder(Graph* graph, int vertice_position, const char* to_be_found);
 extern void direct_transitive_closure(Graph* graph);
 extern void graph_print_direct_transitive_closure(Graph* graph);
+extern void  free_direct_transitive_closure(Graph* graph);
 
 extern void graph_print_vertices(Graph* graph);
 extern void graph_print_edges(Graph* graph);

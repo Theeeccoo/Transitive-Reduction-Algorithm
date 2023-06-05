@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "graph.h"
 #include "stack.h"
+#include "walk.h"
 
 /**
  * @brief Splits a edge string into pieces containing vertices
@@ -91,9 +92,9 @@ int main(void){
 				graph_print_edges(g);
 
 
-				printf("\n\n\n\n\nCloned graph\n");
-				graph_print_vertices(cloned);
-				graph_print_edges(cloned);
+				//printf("\n\n\n\n\nCloned graph\n");
+				//graph_print_vertices(cloned);
+				//graph_print_edges(cloned);
 			} // Ending Graph null verification
 		} // Ending Graph's variables verification
 	} // Ending file properly opened verification
@@ -101,9 +102,15 @@ int main(void){
 
 	// Testing direct transitive closure
 	direct_transitive_closure(g);
-	graph_print_direct_transitive_closure(g);
+
+	direct_transitive_closure(cloned);
 
 	
+	printf("\n\n\n\nCAMINHEI graph\n");
+	Graph *fodasse = walk(g);
+	graph_print_vertices(fodasse);
+	graph_print_edges(fodasse);
+
 	fclose(entrada);
 	return 0;	
 }

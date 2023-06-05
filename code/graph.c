@@ -327,6 +327,7 @@ void graph_print_edges(Graph* graph){
 	}
 }
 
+
 void graph_print_direct_transitive_closure(Graph* graph) {
 	int	i = 0,
 		j = 0; 
@@ -344,6 +345,24 @@ void graph_print_direct_transitive_closure(Graph* graph) {
 			}
 		}
 		printf("\n");
+	}
+}
+
+/*
+ * @brief Frees all direct transitive closure
+ *
+ * @param graph Graph to be iterated
+ *
+ */
+void free_direct_transitive_closure(Graph* graph) {
+	int	i = 0,
+		j = 0; 
+
+	for( ; i < graph->vertices_amount ; i++ ){ 
+		for( j = 0; j < graph->num_transitive_closure[i]; j++ )	{
+			free(graph->transitive_closure[i][j]);
+		}
+		graph->num_transitive_closure[i] = 0;
 	}
 }
 

@@ -41,12 +41,12 @@
  * @name Stack operations
  */
 /**@{*/
-Stack* initStack(int number_of_vertices);
-int isEmpty(Stack* s);
-int isFull(Stack* s);
-void push(Stack* s, STRING vertice);
-STRING pop(Stack* s);
-void stack_print_vertices(Stack* s);
+extern Stack* initStack(int number_of_vertices);
+extern int isEmpty(Stack* s);
+extern int isFull(Stack* s);
+extern void push(Stack* s, STRING vertice);
+extern STRING pop(Stack* s);
+extern void stack_print_vertices(Stack* s);
 /**@}*/
 
 
