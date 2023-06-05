@@ -36,8 +36,8 @@ int main(void){
 		edges = 0, 
 		flag = 0, 
 		control = 0;
-	Graph	*g, 
-		*cloned;
+	Graph	*g = NULL; 
+	Graph	*cloned = NULL;
 
 	char	vertice[STR_SIZE],
 		edge[STR_SIZE];
@@ -86,7 +86,7 @@ int main(void){
 					control++;
 				}
 				cloned = graph_clone(g);
-				graph_add_vertice(cloned, "f");
+				//graph_add_vertice(cloned, "f");
 				graph_print_vertices(g);
 				graph_print_edges(g);
 
