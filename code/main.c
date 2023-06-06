@@ -106,10 +106,10 @@ int main(void){
 	direct_transitive_closure(cloned);
 
 	
-	printf("\n\n\n\nCAMINHEI graph\n");
-	Graph *fodasse = walk(g);
-	graph_print_vertices(fodasse);
-	graph_print_edges(fodasse);
+	printf("\n\nTRANSITIVE REDUCTION THROUGH WALKING\n\n");
+	Graph *tr = walk(g);
+	graph_print_vertices(tr);
+	graph_print_edges(tr);
 
 	fclose(entrada);
 	return 0;	

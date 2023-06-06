@@ -20,7 +20,6 @@ int isEqual(Graph* original, Graph* modified){
     int	i = 0; 
 
     for (; i < original->vertices_amount ; i++) {
-        printf("original: %d - modified: %d\n", original->num_transitive_closure[i] , modified->num_transitive_closure[i]);
         if(original->num_transitive_closure[i] != modified->num_transitive_closure[i]) return 0;
     }
     
@@ -54,7 +53,6 @@ Graph* walk(Graph* graph) {
             strcpy(vertice_del, clone_graph->edges[i][j]);
             
             if (graph->flag == NON_DIRECTED) {
-                printf("nao pode entrar aqui\n");
                 // Remove edge from other vertex also when graph is undirected
                 pos_non_directed = graph_vertice_finder(clone_graph, clone_graph->edges[i][j]);
                 if (pos_non_directed != -1) {
@@ -66,21 +64,22 @@ Graph* walk(Graph* graph) {
                     clone_graph->edges_neighbours[pos_non_directed]--;
                 }
             }
-            printf("vertice: %s\n", vertice_del);
+            //printf("vertice: %s\n", vertice_del);
             free(clone_graph->edges[i][j]);
             strcpy(clone_graph->edges[i][j], "");
             clone_graph->edges_neighbours[i]--;
+            clone_graph->edges_amount--;
 
             direct_transitive_closure(clone_graph);
-            graph_print_direct_transitive_closure(clone_graph);
+            //graph_print_direct_transitive_closure(clone_graph);
 
             if (isEqual(graph, clone_graph) == NON_EQUAL) {
-                printf("ENTREEEEEEI; %d\n\n", isEqual(graph, clone_graph));
                 // If the transitive closure is not equal to the original graph, return the edge to where it was
                 clone_graph->edges[i][j] = (STRING) malloc( sizeof(char) * STR_SIZE + 1 );
                 strcpy(clone_graph->edges[i][j], "");
                 strcpy(clone_graph->edges[i][j], vertice_del);
                 clone_graph->edges_neighbours[i]++;
+                clone_graph->edges_amount++;
                 
                 if (graph->flag == NON_DIRECTED) {
                     clone_graph->edges[pos_non_directed][pos_vertice_del_non_directed] = (STRING) malloc( sizeof(char) * STR_SIZE + 1 );
