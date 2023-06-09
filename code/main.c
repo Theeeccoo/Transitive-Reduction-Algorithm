@@ -4,6 +4,7 @@
 #include "graph.h"
 #include "stack.h"
 #include "walk.h"
+#include "permutation.h"
 
 /**
  * @brief Splits a edge string into pieces containing vertices
@@ -110,6 +111,11 @@ int main(void){
 	Graph *tr = walk(g);
 	graph_print_vertices(tr);
 	graph_print_edges(tr);
+	
+	/*
+	Graph *pTR = permutation(g);
+	graph_print_vertices(pTR);
+	*/
 
 	fclose(entrada);
 	return 0;	

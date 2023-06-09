@@ -73,6 +73,7 @@ extern void graph_destroy(Graph* graph);
 extern int  graph_vertice_finder(Graph* graph, const char* vertice);
 extern int  graph_edge_finder(Graph* graph, int vertice_position, const char* to_be_found);
 extern void direct_transitive_closure(Graph* graph);
+extern void free_edge(Graph* graph, int pos_vertice, int pos_vertice_delete);
 extern void graph_print_direct_transitive_closure(Graph* graph);
 extern void  free_direct_transitive_closure(Graph* graph);
 

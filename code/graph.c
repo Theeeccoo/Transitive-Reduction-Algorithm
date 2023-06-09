@@ -48,18 +48,32 @@ Graph* graph_clone(Graph *g){
 	}
 
 	Graph	*cloned = graph_initializer(g->vertices_amount, g->edges_amount, g->flag);
-	int	i = 0,
-		j = 0;
+	int	pos_first  =  0,
+		pos_second =  0,
+		first_neighbours_amount = 0;
 
-	for ( ; i < g->vertices_amount; i++ ) {
+	for (int i = 0; i < g->vertices_amount; i++ ) {
 		graph_add_vertice(cloned, g->vertices[i]);
 	}
 
-	for ( i = 0; i < g->vertices_amount; i++ ) {
-	
-		for( j = 0; j < g->edges_neighbours[i]; j++ ) {
-						// a		b c d e f
-			graph_add_edge(cloned, g->vertices[i], g->edges[i][j]);	
+	for ( pos_first = 0; pos_first < g->vertices_amount; pos_first++ ) {
+		for( pos_second = 0; pos_second < g->edges_neighbours[pos_first]; pos_second++ ) {
+
+			first_neighbours_amount = cloned->edges_neighbours[pos_first];
+		
+			// Other vertice is already inserted
+			if ( graph_edge_finder(cloned, pos_first, g->edges[pos_first][pos_second]) != -1 ) {
+				printf("ERROR: Your destination vertice (%s) is already inserted in List of Neighbours of source (%s)\n", g->edges[pos_first][pos_second], g->vertices[pos_first]);
+			} else {
+				// Alocatting line on demand
+				cloned->edges[pos_first][first_neighbours_amount] = (STRING) malloc( sizeof(char) * STR_SIZE + 1 );
+
+				// Inserting value on line
+				strcpy( cloned->edges[pos_first][first_neighbours_amount], g->edges[pos_first][pos_second]);
+				
+				// Incrementing number of neighbours that given vertice has
+				cloned->edges_neighbours[pos_first] += 1;
+			}
 		}
 	}
 	
@@ -296,6 +310,31 @@ void direct_transitive_closure(Graph* graph) {
 		pos = 0;
 	}
 }	
+
+/**
+ * @brief Deletes a neighboring vertex, which represents an edge in the graph
+ *
+ * @param graph Graph that will have edge deleted
+ *
+ * @details If a vertex is not at the end of the vector of neighboring vertices, 
+ * 			it is necessary, in addition to deleting the requested vertex that 
+ * 			is in the middle, to move the vertices from right to left, to fill 
+ * 			the empty position of the deleted vertex
+ */
+void free_edge(Graph* graph, int pos_vertice, int pos_vertice_delete) {
+	int number_neighbours = graph->edges_neighbours[pos_vertice];
+	//printf("linha edges: %d  - posVerticeEliminado: %d  - numberVizinhos: %d\n", pos_vertice, pos_vertice_delete, number_neighbours);
+
+	for (int i = pos_vertice_delete; i < number_neighbours; i++) {
+		strcpy(graph->edges[pos_vertice][i], "");
+		if (i < (number_neighbours - 1)) {
+			strcpy(graph->edges[pos_vertice][i], graph->edges[pos_vertice][i + 1]);
+		}
+	}
+
+	free(graph->edges[pos_vertice][number_neighbours -1]);
+    graph->edges_neighbours[pos_vertice] -= 1;
+}
 
 void graph_print_vertices(Graph* graph){
 	int	i = 0;
