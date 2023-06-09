@@ -106,17 +106,17 @@ int main(void){
 
 	direct_transitive_closure(cloned);
 
-	
+	/*
 	printf("\n\nTRANSITIVE REDUCTION THROUGH WALKING\n\n");
 	Graph *tr = walk(g);
 	graph_print_vertices(tr);
 	graph_print_edges(tr);
-	
-	/*
-	Graph *pTR = permutation(g);
-	graph_print_vertices(pTR);
 	*/
-
+	
+	Graph *pTR = permutation(g);
+	printf("\n\n\n");
+	graph_print_vertices(pTR);
+	
 	fclose(entrada);
 	return 0;	
 }

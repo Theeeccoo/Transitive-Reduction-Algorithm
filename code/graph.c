@@ -339,7 +339,7 @@ void free_edge(Graph* graph, int pos_vertice, int pos_vertice_delete) {
 void graph_print_vertices(Graph* graph){
 	int	i = 0;
 
-	printf("Vertices of your graph: \n\t");
+	printf("\nVertices of your graph: \n\t");
 	for( ; i < graph->vertices_amount; i++){
 		printf("%s-\t", graph->vertices[i]); 
 	}
@@ -350,7 +350,7 @@ void graph_print_edges(Graph* graph){
 	int	i = 0,
 		j = 0; 
 
-	printf("Edges of your graph: \n");	
+	printf("\nEdges of your graph: \n");	
 
 	for( ; i < graph->vertices_amount ; i++ ){
 		
