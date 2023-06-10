@@ -103,6 +103,7 @@ int main(void){
 
 	// Testing direct transitive closure
 	direct_transitive_closure(g);
+	graph_print_direct_transitive_closure(g);
 
 	direct_transitive_closure(cloned);
 
@@ -114,8 +115,15 @@ int main(void){
 	*/
 	
 	Graph *pTR = permutation(g);
-	printf("\n\n\n");
 	graph_print_vertices(pTR);
+	graph_print_edges(pTR);
+
+	direct_transitive_closure(pTR);
+	graph_print_direct_transitive_closure(pTR);
+
+	if(isEqual(g, pTR) == ! NON_EQUAL) {
+		printf("\nFecho transitivo direto igual \\o/\n\n");
+	}
 	
 	fclose(entrada);
 	return 0;	

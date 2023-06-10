@@ -331,8 +331,9 @@ void free_edge(Graph* graph, int pos_vertice, int pos_vertice_delete) {
 			strcpy(graph->edges[pos_vertice][i], graph->edges[pos_vertice][i + 1]);
 		}
 	}
-
-	free(graph->edges[pos_vertice][number_neighbours -1]);
+	if (graph->edges[pos_vertice][number_neighbours -1] != NULL) {
+		free(graph->edges[pos_vertice][number_neighbours -1]);
+	}
     graph->edges_neighbours[pos_vertice] -= 1;
 }
 

@@ -17,6 +17,7 @@
   /**@{*/
     #define INVALID		    0		      /* Information if permuted path is invalid */
     #define VALID         1         /* Information if permuted path is valid   */
+    #define IS_DISJOINT   1         /* Information if the paths are disjoint */
   /**@}*/
 
   typedef struct Paths {
@@ -52,5 +53,6 @@ extern void permute(Graph* graph, STRING* sequence, Paths* paths, STRING vertex_
 extern void permuted_paths (Graph* graph, Paths* paths, STRING vertex_origin, STRING destination_vertex);
 extern void free_paths(Paths* paths);
 extern void delete_path_disjoint(Graph* graph, Paths* paths);
+extern int is_disjoint_path(Paths* paths, int shortest_path_position);
 extern Graph* permutation(Graph* graph);
 /**@}*/

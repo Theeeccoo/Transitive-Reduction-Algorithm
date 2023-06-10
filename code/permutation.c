@@ -294,20 +294,6 @@ void permuted_paths (Graph* graph, Paths* paths, STRING vertex_origin, STRING de
         permute(graph, sequence, paths, vertex_origin, destination_vertex, size_sequence, number_vertices_between, 0);
         number_vertices_between++;
     }
-
-    // Free up sequence memory
-    /*
-    if (sequence != NULL) {
-        for (int i = 0; i < size_sequence; i++) {
-            if (sequence[i] != NULL) {
-                free(sequence[i]);
-            }
-        }
-        if (sequence != NULL) {
-            free(sequence);
-        }
-    } 
-    */
 }
 
 /**
@@ -323,17 +309,15 @@ void free_paths(Paths* paths) {
 
     // Freeing memory of each vector that contains the paths
     for( i = 0; i < paths->amount_paths; i++) {
-
         number_vertices = paths->number_edges[i] + 1;
-        for (int j = 0; j < number_vertices; j++) {
-            // Freeing memory from each vertex of the path
-            if (paths->paths[i][j] != NULL) {
-                free(paths->paths[i][j]);
-            }
-        }
-        // Free vector memory
+
         if (paths->paths[i] != NULL) {
-            free(paths->paths[i]);
+            for (int j = 0; j < number_vertices; j++) {
+                // Freeing memory from each vertex of the path
+                if (paths->paths[i][j] != NULL) {
+                    free(paths->paths[i][j]);
+                }
+            }
         }
     }
 
@@ -347,17 +331,101 @@ void free_paths(Paths* paths) {
 }
 
 /**
- * @brief Frees the memory of stored paths
+ * @brief Checks if the paths are disjoint
  *
- * @param paths Structure that has the paths that will be released
+ * @param paths Structure containing the permuted paths
+ * @param shortest_path_position Position of the shortest path that will be 
+ *                               compared with the longest path
+ *
+ * @details If all edges of the shortest path are different from the longest 
+ *          path, then the paths are disjoint.
  * 
- * @details Frees the memory of stored paths
+ * @return Returns 1 if the paths are disjoint, otherwise 0
  */
-/*
+int is_disjoint_path(Paths* paths, int shortest_path_position) {
+    int controll = 1,
+        first_vertice = -1;
+    int number_edges_less = paths->number_edges[shortest_path_position];
+    int number_edges_bigger = paths->number_edges[paths->position_greatest_path];
+
+    for (int i = 0; i < number_edges_less; i++) {
+        first_vertice = -1;
+        for (int j = 0; j < number_edges_bigger; j++) {
+            // If first vertex equals
+            if (strcmp(paths->paths[shortest_path_position][i], paths->paths[paths->position_greatest_path][j]) == 0) {
+                first_vertice = j;
+                j = number_edges_bigger;
+            }
+        }
+
+        if (first_vertice != -1) {
+            for (int j = first_vertice + 1; j < number_edges_bigger; j++) {
+                // If second vertex equals
+                if (strcmp(paths->paths[shortest_path_position][i + 1], paths->paths[paths->position_greatest_path][j]) == 0) {
+                    j = number_edges_bigger;
+                    controll = 0;
+                    i = number_edges_less;
+                }
+            }
+        }
+    }
+
+    return controll;
+}
+
+/**
+ * @brief Remove minor paths that are disjoint from the longest path between two vertices
+ *
+ * @param graph Graph that will have the paths removed
+ * @param paths Structure that has the paths that will be compared if they are disjoint
+ * 
+ * @details If paths are disjoint then minor can be removed
+ */
 void delete_path_disjoint(Graph* graph, Paths* paths) {
+    int i = 0,
+        number_edges = 0,
+        first_vertice = -1,
+        second_vertice = -1;
 
+    for (i = 0; i < paths->amount_paths; i++) {
+        // Analyze path that is different from longest path
+        if (i != paths->position_greatest_path) {
 
-}*/
+            // If the shortest path is disjoint from the long one, it will be removed
+            if (is_disjoint_path(paths, i) == IS_DISJOINT) {
+
+                // Remove disjoint path from graph
+                number_edges = paths->number_edges[i];
+                for (int j = 0; j < number_edges; j++) {
+                    
+                    first_vertice = graph_vertice_finder(graph, paths->paths[i][j]);
+                    if (first_vertice != -1) {
+
+                        second_vertice = graph_edge_finder(graph, first_vertice, paths->paths[i][j + 1]);
+
+                        if (second_vertice != - 1) {
+                            free_edge(graph, first_vertice, second_vertice);
+                            graph->edges_amount -= 1;
+                            
+                            
+                            // Remove the edge as if it were the opposite path, as it is an undirected graph
+                            if (graph->flag == NON_DIRECTED) {
+                                first_vertice = graph_vertice_finder(graph, paths->paths[i][j + 1]);
+
+                                if (first_vertice != -1) {
+                                    second_vertice = graph_edge_finder(graph, first_vertice, paths->paths[i][j]);
+                                    if (second_vertice != -1) {
+                                        free_edge(graph, first_vertice, second_vertice);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 /**
  * @brief Transitive reduction through the permutation method
@@ -380,21 +448,16 @@ Graph* permutation(Graph* graph) {
     int amount_paths = calculate_number_of_possible_paths(graph);      /* Number of all permuted paths in a graph */
     Paths* paths = path_initializer(amount_paths);
 
-    //printf("\namount_paths: %d\n", amount_paths);
-    
     for( int i = 0; i < (graph->vertices_amount - 1); i++ ){
         for (int j = i + 1; j < graph->vertices_amount; j++) {
             //printf("Caminhos gerados: %s - %s\n", clone_graph->vertices[i], clone_graph->vertices[j]);
 
             permuted_paths(clone_graph, paths, clone_graph->vertices[i], clone_graph->vertices[j]);
-
-            
             //print_paths(paths);
             
-            // TODO - Verificar se caminhos são disjuntos
-            // TODO - Remover os caminhos válidos que são disjuntos e menores que o maior caminho
+            // Remove minor paths that are disjoint from the longest path if there is more than one valid permuted path
             if (paths->amount_paths > 1) {
-                //delete_path_disjoint(clone_graph, paths);
+                delete_path_disjoint(clone_graph, paths);
             }
 
             /*  Free up memory of the generated paths, as new permutations will be generated in the 
@@ -404,8 +467,27 @@ Graph* permutation(Graph* graph) {
         }
 	}
 
+    // Permut the transpose graph
     if (graph->flag == DIRECTED) {
-        // TODO - Permutar o grafo transposto, uma ideia é fazer conforme o 'for' acima, porém começando da última posição e indo até a posição 0
+
+        for( int i = graph->vertices_amount - 1; i > 0; i-- ){
+            for (int j = i - 1; j >= 0; j--) {
+                //printf("Caminhos gerados: %s - %s\n", clone_graph->vertices[i], clone_graph->vertices[j]);
+
+                permuted_paths(clone_graph, paths, clone_graph->vertices[i], clone_graph->vertices[j]);
+                //print_paths(paths);
+                
+                // Remove minor paths that are disjoint from the longest path if there is more than one valid permuted path
+                if (paths->amount_paths > 1) {
+                    delete_path_disjoint(clone_graph, paths);
+                }
+
+                /*  Free up memory of the generated paths, as new permutations will be generated in the 
+                    structure for other source and destination vertices 
+                */
+                free_paths(paths);
+            }
+        }
     }
 
     return clone_graph;
