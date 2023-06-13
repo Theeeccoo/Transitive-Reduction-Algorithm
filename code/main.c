@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include <string.h>
 #include <stdlib.h>
 #include "graph.h"
@@ -89,6 +90,7 @@ int main(void){
 				}
 				cloned = graph_clone(g);
 				//graph_add_vertice(cloned, "f");
+                printf("ORIGINAL GRAPH\n");
 				graph_print_vertices(g);
 				graph_print_edges(g);
 
@@ -103,27 +105,48 @@ int main(void){
 
 	// Testing direct transitive closure
 	direct_transitive_closure(g);
-	graph_print_direct_transitive_closure(g);
+	//graph_print_direct_transitive_closure(g);
 
 	direct_transitive_closure(cloned);
 
-	/*
-	printf("\n\nTRANSITIVE REDUCTION THROUGH WALKING\n\n");
-	Graph *tr = walk(g);
-	graph_print_vertices(tr);
-	graph_print_edges(tr);
-	*/
-	
-	Graph *pTR = permutation(g);
-	graph_print_vertices(pTR);
-	graph_print_edges(pTR);
+    Graph *pTR = NULL;
 
-	direct_transitive_closure(pTR);
-	graph_print_direct_transitive_closure(pTR);
+    clock_t start, end;
+    double duration;
+	int option = 0;
+    printf("\nPermutate: 1\nWalk: 2\nOption: ");
+    scanf("%d", &option);
+    switch(option){
+        case 1:
+            start = clock();
+            Graph *tr = walk(g);
+            graph_print_vertices(tr);
+            graph_print_edges(tr);
+            end = clock();
+            duration = ((double)end - start)/CLOCKS_PER_SEC;
+            printf("Time to get Transitive Reduction through Walking in seconds: %g\n", duration);
+            break;
 
+        case 2:
+            start = clock();
+            pTR = permutation(g);
+            graph_print_vertices(pTR);
+            graph_print_edges(pTR);
+
+            direct_transitive_closure(pTR);
+            graph_print_direct_transitive_closure(pTR);
+            end = clock();
+            duration = ((double)end - start)/CLOCKS_PER_SEC;
+            printf("Time to get Transitive Reduction through Permutation in seconds: %g\n", duration);
+            break;
+
+        default:
+            printf("Invalid option!!!\n");
+    }
+    /*
 	if(isEqual(g, pTR) == ! NON_EQUAL) {
 		printf("\nFecho transitivo direto igual \\o/\n\n");
-	}
+	}*/
 	
 	fclose(entrada);
 	return 0;	
