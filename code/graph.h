@@ -17,8 +17,8 @@
 	/**@{*/
 	#define STRING			char*
 	#define STR_SIZE		30		/* Max size of a string */
-	#define MAX_AMOUNT		1000	/* Max number amount of vertices AND edges */
-	#define NON_DIRECTED 	0		/* Graph not directed */
+	#define MAX_AMOUNT		1000		/* Max number amount of vertices AND edges */
+	#define NON_DIRECTED 		0		/* Graph not directed */
 	#define DIRECTED		1		/* Graph directed */
 	/**@}*/
 

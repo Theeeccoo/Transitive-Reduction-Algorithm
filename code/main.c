@@ -47,7 +47,7 @@ int main(void){
 
 	STRING* split_edge;
 	
-	FILE *entrada = fopen("grafo5.txt", "rt");
+	FILE *entrada = fopen("grafo3.txt", "rt");
 	if (entrada == NULL) {
 		printf("ERROR: Invalid opening of file\n");
 	} else {
@@ -89,15 +89,11 @@ int main(void){
 					control++;
 				}
 				cloned = graph_clone(g);
-				//graph_add_vertice(cloned, "f");
-                printf("ORIGINAL GRAPH\n");
+		                printf("ORIGINAL GRAPH\n");
 				graph_print_vertices(g);
 				graph_print_edges(g);
 
 
-				//printf("\n\n\n\n\nCloned graph\n");
-				//graph_print_vertices(cloned);
-				//graph_print_edges(cloned);
 			} // Ending Graph null verification
 		} // Ending Graph's variables verification
 	} // Ending file properly opened verification
@@ -109,52 +105,49 @@ int main(void){
 
 	direct_transitive_closure(cloned);
 
-    Graph *pTR = NULL;
+	Graph *pTR = NULL;
 
-    clock_t start, end;
-    double duration;
-	int option = 0;
-    printf("\nPermutate: 1\nWalk: 2\nOption: ");
-    scanf("%d", &option);
-    switch(option){
-        case 1:
-            start = clock();
-            Graph *tr = walk(g);
-            graph_print_vertices(tr);
-            graph_print_edges(tr);
-            end = clock();
-            duration = ((double)end - start)/CLOCKS_PER_SEC;
-            printf("Time to get Transitive Reduction through Walking in seconds: %g\n", duration);
-            break;
+		
+	if ( !isCyclic(g) ) {
+		clock_t start, end;
+		double duration;
+		int option = 0;
+		printf("\nWalk 1: \nPermutate: 2\nOption: ");
+		scanf("%d", &option);
+		switch(option){
+			case 1:
+			    start = clock();
+			    Graph *tr = walk(g);
+			    graph_print_vertices(tr);
+			    graph_print_edges(tr);
+			    end = clock();
+			    duration = ((double)end - start)/CLOCKS_PER_SEC;
+			    printf("Time to get Transitive Reduction through Walking in seconds: %g\n", duration);
+			    break;
 
-        case 2:
-            start = clock();
-            pTR = permutation(g);
-            graph_print_vertices(pTR);
-            graph_print_edges(pTR);
+			case 2:
+			    start = clock();
+			    pTR = permutation(g);
+			    graph_print_vertices(pTR);
+			    graph_print_edges(pTR);
 
-            direct_transitive_closure(pTR);
-            graph_print_direct_transitive_closure(pTR);
-            end = clock();
-            duration = ((double)end - start)/CLOCKS_PER_SEC;
-            printf("Time to get Transitive Reduction through Permutation in seconds: %g\n", duration);
-            break;
+			    direct_transitive_closure(pTR);
+			    graph_print_direct_transitive_closure(pTR);
+			    end = clock();
+			    duration = ((double)end - start)/CLOCKS_PER_SEC;
+			    printf("Time to get Transitive Reduction through Permutation in seconds: %g\n", duration);
+			    break;
 
-        default:
-            printf("Invalid option!!!\n");
-    }
+			default:
+			    printf("Invalid option!!!\n");
+	       }
+	} else {
+		printf("ERROR: Your graph contains cycle! Analysis can't be done.\n");
+	} 
     /*
 	if(isEqual(g, pTR) == ! NON_EQUAL) {
 		printf("\nFecho transitivo direto igual \\o/\n\n");
 	}*/
-
-	//testing if the graph has cicle
-	// if (isCyclic(g)){
-    // 	printf("Graph contains a cycle\n");
-	// }else{
-    // 	printf("Graph does not contain a cycle\n");
-	// }
-	printf("Graph contains cycle: %s\n", (isCyclic(g) ? "Yes" : "No"));
 
 	fclose(entrada);
 	return 0;	
