@@ -388,7 +388,7 @@ void graph_print_direct_transitive_closure(Graph* graph) {
 	}
 }
 
-/*
+/**
  * @brief Frees all direct transitive closure
  *
  * @param graph Graph to be iterated
@@ -411,4 +411,51 @@ void graph_destroy(Graph* graph) {
 	free(graph->vertices);
 	free(graph->edges);
 	free(graph);
+}
+
+/**
+ * @brief Find a cycle in a graph
+ *
+ * @return 1 if a cycle is found, 0 otherwise
+ */
+int isCyclic(Graph* graph) {
+    int* visited = (int*) calloc(graph->vertices_amount, sizeof(int));
+    int* stack = (int*) calloc(graph->vertices_amount, sizeof(int));
+
+    for (int i = 0; i < graph->vertices_amount; i++) {
+        if (isCyclicUntil(graph, i, visited, stack))
+            return 1;
+    }
+
+    free(visited);
+    free(stack);
+    return 0;
+}
+
+/**
+ * @brief Helper function to check if there is a cycle in the graph starting from a given vertex
+ *
+ * @param graph Graph to be iterated
+ * @param vertex Starting vertex
+ * @param visited Array to keep track of visited vertices
+ * @param stack Array to keep track of vertices in the current path
+ * @return 1 if a cycle is found, 0 otherwise
+ */
+int isCyclicUntil(Graph* graph, int vertex, int* visited, int* stack) {
+    if (visited[vertex] == 0) {
+        visited[vertex] = 1;
+        stack[vertex] = 1;
+
+        for (int i = 0; i < graph->edges_neighbours[vertex]; i++) {
+            int neighbor = graph_vertice_finder(graph, graph->edges[vertex][i]);
+
+            if (!visited[neighbor] && isCyclicUntil(graph, neighbor, visited, stack))
+                return 1;
+            else if (stack[neighbor])
+                return 1;
+        }
+    }
+
+    stack[vertex] = 0;
+    return 0;
 }

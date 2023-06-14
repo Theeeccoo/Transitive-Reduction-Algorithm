@@ -79,4 +79,7 @@ extern void  free_direct_transitive_closure(Graph* graph);
 
 extern void graph_print_vertices(Graph* graph);
 extern void graph_print_edges(Graph* graph);
+
+extern int isCyclic(Graph* graph);
+extern int isCyclicUntil(Graph* graph, int vertex, int* visited, int* stack);
 /**@}*/

@@ -47,7 +47,7 @@ int main(void){
 
 	STRING* split_edge;
 	
-	FILE *entrada = fopen("grafo2.txt", "rt");
+	FILE *entrada = fopen("grafo5.txt", "rt");
 	if (entrada == NULL) {
 		printf("ERROR: Invalid opening of file\n");
 	} else {
@@ -147,7 +147,15 @@ int main(void){
 	if(isEqual(g, pTR) == ! NON_EQUAL) {
 		printf("\nFecho transitivo direto igual \\o/\n\n");
 	}*/
-	
+
+	//testing if the graph has cicle
+	// if (isCyclic(g)){
+    // 	printf("Graph contains a cycle\n");
+	// }else{
+    // 	printf("Graph does not contain a cycle\n");
+	// }
+	printf("Graph contains cycle: %s\n", (isCyclic(g) ? "Yes" : "No"));
+
 	fclose(entrada);
 	return 0;	
 }
