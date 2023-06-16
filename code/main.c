@@ -112,7 +112,7 @@ int main(void){
 		clock_t start, end;
 		double duration;
 		int option = 0;
-		printf("\nWalk 1: \nPermutate: 2\nOption: ");
+		printf("\nWalk 1: \nPermutate 2:\nOption: ");
 		scanf("%d", &option);
 		switch(option){
 			case 1:
