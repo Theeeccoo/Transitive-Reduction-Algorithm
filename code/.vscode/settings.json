@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "__locale": "c",
+        "string.h": "c",
+        "graph.h": "c",
+        "stack.h": "c"
+    }
+}
